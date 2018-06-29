@@ -18,14 +18,31 @@ namespace PublishSubscribe
                           ? string.Join(" ", args.Skip(1).ToArray())
                           : "Hello World!";
 
+            #region version 1.2
+
+            var publisher = new QueueClient(Exchange.Payload, severity);
             var model = new Model() { Message = message, Severity = severity };
+            publisher.Publish(model);
 
-            var payload = JsonConvert.SerializeObject(model);
+            Console.WriteLine(" [x] Sent '{0}':'{1}'", severity, message);
+            Console.WriteLine(" Press [enter] to exit.");
+            Console.ReadLine();
+            #endregion
 
-            var publisher = new Publisher();
-            publisher.PublishEvent(payload, Exchange.Payload, severity);
+            #region version 1.1
 
-            //#region old version
+            //var model = new Model() { Message = message, Severity = severity };
+            //var payload = JsonConvert.SerializeObject(model);
+
+            //var publisher = new Publisher();
+            //publisher.PublishEvent(payload, Exchange.Payload, severity);
+
+            //Console.WriteLine(" Press [enter] to exit.");
+            //Console.ReadLine();
+
+            #endregion
+
+            #region old version 1.0
 
             //var factory = new ConnectionFactory() { HostName = "localhost" };
             //using (var connection = factory.CreateConnection())
@@ -48,11 +65,12 @@ namespace PublishSubscribe
             //                         body: body);
             //    Console.WriteLine(" [x] Sent '{0}':'{1}'", severity, message);
             //}
+            //Console.WriteLine(" Press [enter] to exit.");
+            //Console.ReadLine();
 
-            //#endregion
 
-            Console.WriteLine(" Press [enter] to exit.");
-            Console.ReadLine();
+            #endregion
+
         }
     }
 

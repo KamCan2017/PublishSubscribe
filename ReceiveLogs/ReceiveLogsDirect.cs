@@ -5,6 +5,7 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace ReceiveLogs
 {
@@ -23,21 +24,43 @@ namespace ReceiveLogs
                 return;
             }
 
-            Subscriber.Callback callback = (palyoad, severity) =>
+            #region version 1.2
+
+            Subscriber.Callback callback = async (palyoad, severity) =>
             {
+                await Task.Delay(1500);
                 var model = JsonConvert.DeserializeObject<Model>(palyoad);
                 Console.WriteLine(" [x] Received '{0}':'{1}'",
                                 severity, model.Message);
             };
-
-            var consumer = new Subscriber();
-            consumer.SubscribeEvent(Exchange.Payload, args, callback);
+            var consumer = new QueueClient(Exchange.Payload, args[1], callback);
 
             Console.WriteLine(" [*] Waiting for messages.");
             Console.WriteLine(" Press [enter] to exit.");
             Console.ReadLine();
 
-            //#region old version
+            #endregion
+
+            #region version 1.1
+            //Subscriber.Callback callback = (palyoad, severity) =>
+            //{
+            //    var model = JsonConvert.DeserializeObject<Model>(palyoad);
+            //    Console.WriteLine(" [x] Received '{0}':'{1}'",
+            //                    severity, model.Message);
+            //};
+
+            //var consumer = new Subscriber();
+            //consumer.SubscribeEvent(Exchange.Payload, args, callback);
+
+            //Console.WriteLine(" [*] Waiting for messages.");
+            //Console.WriteLine(" Press [enter] to exit.");
+            //Console.ReadLine();
+
+
+            #endregion
+
+
+            #region old version 1.0
             //var factory = new ConnectionFactory() { HostName = "localhost" };
             //using (var connection = factory.CreateConnection())
             //using (var channel = connection.CreateModel())
@@ -82,7 +105,7 @@ namespace ReceiveLogs
             //    Console.ReadLine();
             //}
 
-            //#endregion
+            #endregion
         }
     }
 }
