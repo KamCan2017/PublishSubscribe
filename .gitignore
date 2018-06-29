@@ -3,3 +3,7 @@
 ################################################################################
 
 /.vs/PublishSubscribe/v15
+/CommonSource/obj/Debug
+/PublishSubscribe/bin/Debug
+/ReceiveLogs/bin/Debug
+/ReceiveLogs/obj/Debug
